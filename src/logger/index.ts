@@ -1,19 +1,20 @@
-import { ILogger } from "./logget.interface";
+import { BaseLogger } from "./base";
+import { ILogger } from "./types";
 
-export class Logger implements ILogger {
+export class Logger extends BaseLogger implements ILogger  {
     info(data:unknown){
-        console.log(data)
+        this.log(data,'INFO')
     }
 
     debug(data:unknown){
-        console.debug(data)
+        this.log(data,"DEBUG")
     }
 
     warn(data: unknown): void {
-        console.warn(data)
+        this.log(data,'WARN')
     }
 
     error(data: unknown): void {
-        console.error(data)
+        this.log(data,"ERROR")
     }
 }
