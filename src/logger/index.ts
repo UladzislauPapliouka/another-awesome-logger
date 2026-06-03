@@ -2,19 +2,19 @@ import { BaseLogger } from "./base";
 import { ILogger } from "./types";
 
 export class Logger extends BaseLogger implements ILogger  {
-    info(data:unknown){
-        this.log(data,'INFO')
+    info(message:string,payload?:unknown){
+        this.log(message,payload,'INFO')
     }
 
-    debug(data:unknown){
-        this.log(data,"DEBUG")
+    debug(message:string,payload?:unknown){
+        this.log(message,payload,"DEBUG")
     }
 
-    warn(data: unknown): void {
-        this.log(data,'WARN')
+    warn(message:string,payload?:unknown): void {
+        this.log(message,payload,'WARN')
     }
 
-    error(data: unknown): void {
-        this.log(data,"ERROR")
+    error(message:string,payload?:unknown): void {
+        this.log(message,payload,"ERROR")
     }
 }

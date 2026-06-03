@@ -1,15 +1,24 @@
-import { LoggerConfig, LogLevel } from "./types"
-import { LogColorEnd, LogColors } from "./constants"
+import { ConsoleTransport } from "../transport/console";
+import { ITransport, LoggerConfig, LogLevel , Environments} from "./types"
 
 
 export abstract class BaseLogger {
-    _env?:string;
+    _env?:Environments;
     _appVersion?:string;
-    constructor({appVersion,environment}:LoggerConfig = {}){
+    _transports:ITransport[] 
+    constructor({appVersion,environment, transports}:LoggerConfig = {environment:'development'}){
         this._appVersion = appVersion
         this._env = environment
+        this._transports = transports ?? [new ConsoleTransport()]
     }
-    log(data:unknown, level:LogLevel){
-        console.log(`${LogColors[level]}${(new Date()).toISOString()}]${this._env ?  ` - [${this._env}]`:''}${this._appVersion ? ` - [${this._appVersion}]`:''}${LogColorEnd}`,data)
+    log(message:string, payload:unknown, level:LogLevel){
+        for (const transport of this._transports) {
+            if(this._env ==='production' && transport instanceof ConsoleTransport) continue;
+            if(payload){
+                transport.createLog(message,payload,{level,appVersion:this._appVersion,environments:this._env})
+            }else{
+                transport.createLog(message,{level,appVersion:this._appVersion,environments:this._env})
+            }
+        }
     }
 }
